@@ -22,6 +22,15 @@ class Contract(UniversalIdModel, TimeStampedModel):
     nda_clause = models.TextField()
     start_date = models.DateField()
     end_date = models.DateField()
+    status = models.CharField(
+        max_length=50,
+        choices=[
+            ("pending", "Pending"),
+            ("active", "Active"),
+            ("completed", "Completed"),
+        ],
+        default="pending",
+    )
     client = models.ForeignKey(
         Client, on_delete=models.CASCADE, related_name="contract"
     )

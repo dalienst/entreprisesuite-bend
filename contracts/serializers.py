@@ -20,6 +20,7 @@ class ContractSerializer(serializers.ModelSerializer):
     nda_clause = serializers.CharField(max_length=10000)
     start_date = serializers.DateField()
     end_date = serializers.DateField()
+    status = serializers.CharField(max_length=50, default="pending")
     client = serializers.SlugRelatedField(
         slug_field="slug", queryset=Client.objects.all()
     )
@@ -46,6 +47,7 @@ class ContractSerializer(serializers.ModelSerializer):
             "client",
             "user",
             "payment_method",
+            "status",
             "slug",
             "created_at",
             "updated_at",
