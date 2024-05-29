@@ -53,6 +53,8 @@ class UserSerializer(serializers.ModelSerializer):
         ],
     )
     contracts = serializers.SerializerMethodField(read_only=True)
+    clients = serializers.SerializerMethodField(read_only=True)
+    payment_methods = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
@@ -68,6 +70,8 @@ class UserSerializer(serializers.ModelSerializer):
             "is_staff",
             "is_superuser",
             "contracts",
+            "clients",
+            "payment_methods",
         )
 
     @staticmethod
@@ -103,6 +107,16 @@ class UserSerializer(serializers.ModelSerializer):
     def get_contracts(self, obj):
         contracts = obj.contracts.all()
         serializers = ContractSerializer(contracts, many=True)
+        return serializers.data
+    
+    def get_clients(self, obj):
+        clients = obj.clients.all()
+        serializers = ClientSerializer(clients, many=True)
+        return serializers.data
+    
+    def get_payment_methods(self, obj):
+        payment_methods = obj.payment_methods.all()
+        serializers = PaymentMethodSerializer(payment_methods, many=True)
         return serializers.data
 
 
