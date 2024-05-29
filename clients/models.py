@@ -16,3 +16,6 @@ class Client(UniversalIdModel, TimeStampedModel):
     email = models.EmailField()
     phone = models.CharField(max_length=15, blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="clients")
+
+    def __str__(self):
+        return self.name
