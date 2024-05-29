@@ -63,3 +63,26 @@ class Contract(UniversalIdModel, TimeStampedModel):
 
     def __str__(self):
         return f"Contract with {self.client.name}"
+
+
+class Milestone(UniversalIdModel, TimeStampedModel):
+    contract = models.ForeignKey(
+        Contract, on_delete=models.CASCADE, related_name="milestones"
+    )
+    name = models.CharField(max_length=255)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    submission_deadline = models.DateField()
+
+    def __str__(self):
+        return f"{self.name} for {self.contract}"
+
+
+class PaymentMethod(UniversalIdModel, TimeStampedModel):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="payment_methods"
+    )
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.name
