@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     "cloudinary",
     "django_filters",
     # apps
-    "users"
+    "users",
+    "clients",
 ]
 
 MIDDLEWARE = [
