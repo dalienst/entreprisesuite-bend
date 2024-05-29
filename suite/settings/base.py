@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     # apps
     "users",
     "clients",
+    "contracts",
 ]
 
 MIDDLEWARE = [
