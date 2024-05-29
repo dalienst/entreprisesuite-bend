@@ -26,6 +26,11 @@ class ContractTemplate(UniversalIdModel, TimeStampedModel):
         User, on_delete=models.CASCADE, related_name="contract_templates"
     )
 
+    class Meta:
+        verbose_name = "Contract Template"
+        verbose_name_plural = "Contract Templates"
+        ordering = ["-created_at"]
+
     def __str__(self):
         return self.name
 
@@ -61,6 +66,11 @@ class Contract(UniversalIdModel, TimeStampedModel):
         default="pending",
     )
 
+    class Meta:
+        verbose_name = "Contract"
+        verbose_name_plural = "Contracts"
+        ordering = ["-created_at"]
+
     def __str__(self):
         return f"Contract with {self.client.name}"
 
@@ -73,6 +83,11 @@ class Milestone(UniversalIdModel, TimeStampedModel):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     submission_deadline = models.DateField()
 
+    class Meta:
+        verbose_name = "Milestone"
+        verbose_name_plural = "Milestones"
+        ordering = ["-created_at"]
+
     def __str__(self):
         return f"{self.name} for {self.contract}"
 
@@ -83,6 +98,11 @@ class PaymentMethod(UniversalIdModel, TimeStampedModel):
     )
     name = models.CharField(max_length=255)
     description = models.TextField()
+
+    class Meta:
+        verbose_name = "Payment Method"
+        verbose_name_plural = "Payment Methods"
+        ordering = ["-created_at"]
 
     def __str__(self):
         return self.name

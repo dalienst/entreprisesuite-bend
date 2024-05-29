@@ -17,5 +17,10 @@ class Client(UniversalIdModel, TimeStampedModel):
     phone = models.CharField(max_length=15, blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="clients")
 
+    class Meta:
+        verbose_name = "Client"
+        verbose_name_plural = "Clients"
+        ordering = ["-created_at"]
+
     def __str__(self):
         return self.name
