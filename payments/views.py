@@ -18,9 +18,6 @@ class PaymentMethodListCreateView(generics.ListCreateAPIView):
     def get_queryset(self):
         return PaymentMethod.objects.filter(user=self.request.user)
 
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
-
 
 class PaymentMethodDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PaymentMethodSerializer

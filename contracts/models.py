@@ -31,6 +31,7 @@ class Contract(UniversalIdModel, TimeStampedModel):
         ],
         default="pending",
     )
+    currency = models.CharField(max_length=15)
     client = models.ForeignKey(
         Client, on_delete=models.CASCADE, related_name="contract"
     )

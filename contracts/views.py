@@ -1,12 +1,8 @@
-from django.contrib.auth import get_user_model
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
 from contracts.serializers import ContractSerializer
 from contracts.models import Contract
-
-
-User = get_user_model()
 
 
 class ContractListCreateView(generics.ListCreateAPIView):
