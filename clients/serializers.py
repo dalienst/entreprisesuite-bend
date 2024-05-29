@@ -17,4 +17,5 @@ class ClientSerializer(serializers.ModelSerializer):
             "email",
             "phone",
             "user",
+            "slug",
         )

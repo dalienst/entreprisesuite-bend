@@ -4,5 +4,5 @@ from clients.views import ClientListCreateView, ClientDetailView
 
 urlpatterns = [
     path("", ClientListCreateView.as_view(), name="client-list"),
-    path("<str:id>/", ClientDetailView.as_view(), name="client-detail"),
+    path("<str:slug>/", ClientDetailView.as_view(), name="client-detail"),
 ]

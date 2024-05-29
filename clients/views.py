@@ -29,7 +29,7 @@ class ClientListCreateView(generics.ListCreateAPIView):
 class ClientDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ClientSerializer
     permission_classes = [IsAuthenticated]
-    lookup_field = "id"
+    lookup_field = "slug"
 
     def get_queryset(self):
         return Client.objects.filter(user=self.request.user)
