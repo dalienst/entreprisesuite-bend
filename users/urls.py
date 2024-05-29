@@ -22,5 +22,5 @@ urlpatterns = [
     ),
     path("register/", UserRegisterView.as_view(), name="register"),
     path("<str:id>/", UserDetailView.as_view(), name="user-detail"),
-    path("users/", UserListView.as_view(), name="user-list"),
+    path("", UserListView.as_view(), name="user-list"),
 ]
