@@ -14,7 +14,7 @@ class Milestone(UniversalIdModel, TimeStampedModel):
     contract = models.ForeignKey(
         Contract, on_delete=models.CASCADE, related_name="milestones"
     )
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="milestones")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="milestone")
     name = models.CharField(max_length=1000)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     submission_deadline = models.DateField()

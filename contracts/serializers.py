@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from clients.models import Client
 from contracts.models import Contract
 from payments.models import PaymentMethod
+from milestones.serializers import MilestoneSerializer
 
 User = get_user_model()
 
@@ -29,6 +30,7 @@ class ContractSerializer(serializers.ModelSerializer):
     payment_method = serializers.SlugRelatedField(
         slug_field="slug", queryset=PaymentMethod.objects.all()
     )
+    milestones = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Contract
@@ -53,6 +55,7 @@ class ContractSerializer(serializers.ModelSerializer):
             "slug",
             "created_at",
             "updated_at",
+            "milestones",
         )
 
     def get_fields(self):
@@ -63,3 +66,8 @@ class ContractSerializer(serializers.ModelSerializer):
         fields["client"].queryset = Client.objects.filter(user=user)
         fields["payment_method"].queryset = PaymentMethod.objects.filter(user=user)
         return fields
+
+    def get_milestones(self, obj):
+        milestones = obj.milestones.all()
+        serializer = MilestoneSerializer(milestones, many=True)
+        return serializer.data
