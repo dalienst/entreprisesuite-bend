@@ -3,13 +3,8 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils.text import slugify
 from django.contrib.auth import get_user_model
-
-from users.abstracts import (
-    UniversalIdModel,
-    TimeStampedModel,
-)
+from users.abstracts import UniversalIdModel, TimeStampedModel
 from clients.models import Client
-
 
 User = get_user_model()
 
@@ -34,6 +29,11 @@ class ContractTemplate(UniversalIdModel, TimeStampedModel):
         verbose_name = "Contract Template"
         verbose_name_plural = "Contract Templates"
         ordering = ["-created_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "name"], name="unique_user_contract_template"
+            )
+        ]
 
     def __str__(self):
         return self.name
@@ -81,6 +81,11 @@ class Contract(UniversalIdModel, TimeStampedModel):
         verbose_name = "Contract"
         verbose_name_plural = "Contracts"
         ordering = ["-created_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "slug"], name="unique_user_contract_slug"
+            )
+        ]
 
     def __str__(self):
         return f"Contract with {self.client.name}"
@@ -105,6 +110,11 @@ class Milestone(UniversalIdModel, TimeStampedModel):
         verbose_name = "Milestone"
         verbose_name_plural = "Milestones"
         ordering = ["-created_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["contract", "name"], name="unique_contract_milestone_name"
+            )
+        ]
 
     def __str__(self):
         return f"{self.name} for {self.contract}"
@@ -128,6 +138,11 @@ class PaymentMethod(UniversalIdModel, TimeStampedModel):
         verbose_name = "Payment Method"
         verbose_name_plural = "Payment Methods"
         ordering = ["-created_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "name"], name="unique_user_payment_method_name"
+            )
+        ]
 
     def __str__(self):
         return self.name

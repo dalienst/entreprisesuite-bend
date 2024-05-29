@@ -18,4 +18,6 @@ class ClientSerializer(serializers.ModelSerializer):
             "phone",
             "user",
             "slug",
+            "created_at",
+            "updated_at",
         )

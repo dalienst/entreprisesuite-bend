@@ -27,6 +27,8 @@ class ContractTemplateSerializer(serializers.ModelSerializer):
             "termination_policy",
             "nda",
             "slug",
+            "created_at",
+            "updated_at",
         )
 
 
@@ -63,4 +65,46 @@ class ContractSerializer(serializers.ModelSerializer):
             "termination_clause",
             "status",
             "slug",
+            "created_at",
+            "updated_at",
+        )
+
+
+class MilestoneSerializer(serializers.ModelSerializer):
+    contract = serializers.SlugRelatedField(
+        queryset=Contract.objects.all(), slug_field="slug"
+    )
+    name = serializers.CharField(max_length=1000)
+    amount = serializers.IntegerField()
+    submission_deadline = serializers.DateField()
+
+    class Meta:
+        model = Milestone
+        fields = (
+            "id",
+            "contract",
+            "name",
+            "amount",
+            "submission_deadline",
+            "slug",
+            "created_at",
+            "updated_at",
+        )
+
+
+class PaymentMethodSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(read_only=True, source="user.username")
+    name = serializers.CharField(max_length=255)
+    description = serializers.CharField(max_length=10000)
+
+    class Meta:
+        model = PaymentMethod
+        fields = (
+            "id",
+            "user",
+            "name",
+            "description",
+            "slug",
+            "created_at",
+            "updated_at",
         )
