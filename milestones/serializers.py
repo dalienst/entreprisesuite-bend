@@ -4,7 +4,7 @@ from milestones.models import Milestone
 from contracts.models import Contract
 
 
-class MilestonSerializer(serializers.ModelSerializer):
+class MilestoneSerializer(serializers.ModelSerializer):
     name = serializers.CharField(max_length=1000)
     amount = serializers.DecimalField(max_digits=10, decimal_places=2)
     submission_deadline = serializers.DateField()
