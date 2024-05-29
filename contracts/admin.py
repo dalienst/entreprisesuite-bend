@@ -1,8 +1,5 @@
 from django.contrib import admin
 
-from contracts.models import Contract, ContractTemplate, Milestone, PaymentMethod
-
-admin.site.register(Contract)
-admin.site.register(ContractTemplate)
-admin.site.register(Milestone)
+from contracts.models import  PaymentMethod
+\
 admin.site.register(PaymentMethod)
