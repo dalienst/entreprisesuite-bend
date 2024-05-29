@@ -29,9 +29,16 @@ class UserRegisterView(APIView):
 
 
 class UserListView(generics.ListAPIView):
+    """
+    list all users
+    """
+
     serializer_class = UserSerializer
-    queryset = User.objects.all()
     permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        return User.objects.filter(is_active=True)
+    
 
 
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
