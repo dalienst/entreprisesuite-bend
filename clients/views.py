@@ -1,10 +1,6 @@
 from django.contrib.auth import get_user_model
-from rest_framework import generics, status, serializers
-from rest_framework.generics import GenericAPIView
+from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from django.utils import timezone
 
 from clients.serializers import (
     ClientSerializer,
