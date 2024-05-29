@@ -37,3 +37,30 @@ def slug_pre_save(sender, instance, **kwargs) -> None:
         instance.slug = slugify(f"{instance.name}-{instance.id}")
 
 
+class Contract(UniversalIdModel, TimeStampedModel):
+    name = models.CharField(max_length=255)
+    introduction = models.TextField()
+    details = models.TextField()
+    scope = models.TextField()
+    services_provided = models.TextField()
+    compensation_terms = models.TextField()
+    termination_clause = models.TextField()
+    legal_relationship = models.TextField()
+    nda_clause = models.TextField()
+    start_date = models.DateField()
+    end_date = models.DateField()
+    client = models.ForeignKey(
+        Client, on_delete=models.CASCADE, related_name="contract"
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="contracts")
+    payment_method = models.ForeignKey(
+        PaymentMethod, on_delete=models.CASCADE, related_name="contract_payment"
+    )
+
+    class Meta:
+        verbose_name = "Contract"
+        verbose_name_plural = "Contracts"
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return self.name
