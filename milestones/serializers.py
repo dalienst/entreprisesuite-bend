@@ -12,6 +12,7 @@ class MilestoneSerializer(serializers.ModelSerializer):
         slug_field="slug", queryset=Contract.objects.all()
     )
     user = serializers.CharField(read_only=True, source="user.username")
+    status = serializers.CharField(max_length=50, default="pending")
 
     class Meta:
         model = Milestone
@@ -22,13 +23,8 @@ class MilestoneSerializer(serializers.ModelSerializer):
             "submission_deadline",
             "contract",
             "slug",
+            "status",
             "user",
             "created_at",
             "updated_at",
         )
-
-    def get_fields(self):
-        fields = super().get_fields()
-        user = self.context["request"].user
-        fields["contract"].queryset = Contract.objects.filter(user=user)
-        return fields

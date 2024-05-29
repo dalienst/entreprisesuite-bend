@@ -58,15 +58,6 @@ class ContractSerializer(serializers.ModelSerializer):
             "milestones",
         )
 
-    def get_fields(self):
-        fields = super().get_fields()
-        user = self.context["request"].user
-
-        # Filter queryset to the logged-in user's objects
-        fields["client"].queryset = Client.objects.filter(user=user)
-        fields["payment_method"].queryset = PaymentMethod.objects.filter(user=user)
-        return fields
-
     def get_milestones(self, obj):
         milestones = obj.milestones.all()
         serializer = MilestoneSerializer(milestones, many=True)

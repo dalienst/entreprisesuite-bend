@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from clients.models import Client
+from contracts.serializers import ContractSerializer
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -8,6 +9,7 @@ class ClientSerializer(serializers.ModelSerializer):
     email = serializers.EmailField()
     phone = serializers.CharField(max_length=15, required=False)
     user = serializers.CharField(read_only=True, source="user.username")
+    contract = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Client
@@ -20,4 +22,10 @@ class ClientSerializer(serializers.ModelSerializer):
             "slug",
             "created_at",
             "updated_at",
+            "contract",
         )
+
+    def get_contract(self, obj):
+        contract = obj.contract.all()
+        serializer = ContractSerializer(contract, many=True)
+        return serializer.data

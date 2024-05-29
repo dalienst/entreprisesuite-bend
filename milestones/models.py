@@ -19,11 +19,19 @@ class Milestone(UniversalIdModel, TimeStampedModel):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     submission_deadline = models.DateField()
     slug = models.SlugField(blank=True, null=True, unique=True)
+    status = models.CharField(
+        max_length=50,
+        choices=[
+            ("pending", "Pending"),
+            ("paid", "Paid"),
+        ],
+        default="pending",
+    )
 
     class Meta:
         verbose_name = "Milestone"
         verbose_name_plural = "Milestones"
-        ordering = ["-created_at"]
+        ordering = ["created_at"]
 
     def __str__(self):
         return self.name
