@@ -16,6 +16,9 @@ from users.validators import (
 )
 from users.token import account_activation_token
 from suite.settings.base import EMAIL_USER, DOMAIN
+from contracts.serializers import ContractSerializer
+from clients.serializers import ClientSerializer
+from payments.serializers import PaymentMethodSerializer
 
 User = get_user_model()
 
@@ -49,6 +52,9 @@ class UserSerializer(serializers.ModelSerializer):
             validate_password_lowercase,
         ],
     )
+    contracts = serializers.SerializerMethodField(read_only=True)
+    clients = serializers.SerializerMethodField(read_only=True)
+    payment_methods = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
@@ -63,6 +69,9 @@ class UserSerializer(serializers.ModelSerializer):
             "is_active",
             "is_staff",
             "is_superuser",
+            "contracts",
+            "clients",
+            "payment_methods",
         )
 
     @staticmethod
@@ -94,6 +103,21 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         self.send_activation_email(user, request)
         return user
+
+    def get_contracts(self, obj):
+        contracts = obj.contracts.all()
+        serializers = ContractSerializer(contracts, many=True)
+        return serializers.data
+    
+    def get_clients(self, obj):
+        clients = obj.clients.all()
+        serializers = ClientSerializer(clients, many=True)
+        return serializers.data
+    
+    def get_payment_methods(self, obj):
+        payment_methods = obj.payment_methods.all()
+        serializers = PaymentMethodSerializer(payment_methods, many=True)
+        return serializers.data
 
 
 class VerifyEmailSerializer(serializers.Serializer):

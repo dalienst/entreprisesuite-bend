@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     "users",
     "clients",
     "contracts",
+    "payments",
+    "milestones",
 ]
 
 MIDDLEWARE = [

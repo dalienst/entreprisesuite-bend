@@ -1,10 +1,6 @@
 from django.contrib.auth import get_user_model
-from rest_framework import generics, status, serializers
-from rest_framework.generics import GenericAPIView
+from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from django.utils import timezone
 
 from clients.serializers import (
     ClientSerializer,
@@ -29,7 +25,7 @@ class ClientListCreateView(generics.ListCreateAPIView):
 class ClientDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ClientSerializer
     permission_classes = [IsAuthenticated]
-    lookup_field = "id"
+    lookup_field = "slug"
 
     def get_queryset(self):
         return Client.objects.filter(user=self.request.user)

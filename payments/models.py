@@ -1,36 +1,35 @@
 from django.db import models
-from django.contrib.auth import get_user_model
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils.text import slugify
-
+from django.contrib.auth import get_user_model
 from users.abstracts import UniversalIdModel, TimeStampedModel
 
 User = get_user_model()
 
-
-class Client(UniversalIdModel, TimeStampedModel):
-    """
-    Adding personal clients
-    Details about the clients
-    """
-
+class PaymentMethod(UniversalIdModel, TimeStampedModel):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="payment_methods"
+    )
     name = models.CharField(max_length=255)
-    email = models.EmailField()
-    phone = models.CharField(max_length=15, blank=True, null=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="clients")
+    description = models.TextField()
     slug = models.SlugField(max_length=400, unique=True, blank=True, null=True)
 
     class Meta:
-        verbose_name = "Client"
-        verbose_name_plural = "Clients"
+        verbose_name = "Payment Method"
+        verbose_name_plural = "Payment Methods"
         ordering = ["-created_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "name"], name="unique_user_payment_method_name"
+            )
+        ]
 
     def __str__(self):
         return self.name
 
 
-@receiver(pre_save, sender=Client)
+@receiver(pre_save, sender=PaymentMethod)
 def slug_pre_save(sender, instance, **kwargs) -> None:
     if instance.slug is None or instance.slug == "":
         instance.slug = slugify(f"{instance.name}-{instance.id}")
