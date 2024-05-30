@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "contracts",
     "payments",
     "milestones",
+    "interims",
 ]
 
 MIDDLEWARE = [
