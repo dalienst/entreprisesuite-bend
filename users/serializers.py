@@ -1,3 +1,4 @@
+from typing import Any, Dict
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework.validators import UniqueValidator
@@ -7,6 +8,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from users.validators import (
     validate_password_symbol,
@@ -108,12 +110,12 @@ class UserSerializer(serializers.ModelSerializer):
         contracts = obj.contracts.all()
         serializers = ContractSerializer(contracts, many=True)
         return serializers.data
-    
+
     def get_clients(self, obj):
         clients = obj.clients.all()
         serializers = ClientSerializer(clients, many=True)
         return serializers.data
-    
+
     def get_payment_methods(self, obj):
         payment_methods = obj.payment_methods.all()
         serializers = PaymentMethodSerializer(payment_methods, many=True)
@@ -165,3 +167,16 @@ class LogoutSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 "Invalid or expired token", code="invalid_token"
             )
+
+
+class LoginTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs: Dict[str, Any]) -> Dict[str, str]:
+        data = super(LoginTokenObtainPairSerializer, self).validate(attrs)
+
+        data.update({"email": self.user.email})
+        data.update({"username": self.user.username})
+        data.update({"first_name": self.user.first_name})
+        data.update({"last_name": self.user.last_name})
+        data.update({"id": self.user.id})
+
+        return data

@@ -5,15 +5,26 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.utils import timezone
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from users.serializers import (
     UserSerializer,
     LogoutSerializer,
     VerifyEmailSerializer,
+    LoginTokenObtainPairSerializer
 )
 
 
 User = get_user_model()
+
+
+class LoginView(TokenObtainPairView):
+    """
+    Takes a set of user credentials and returns an access and refresh JSON web
+    token pair to prove the authentication of those credentials.
+    """
+
+    serializer_class = LoginTokenObtainPairSerializer
 
 
 class UserRegisterView(APIView):
@@ -38,7 +49,6 @@ class UserListView(generics.ListAPIView):
 
     def get_queryset(self):
         return User.objects.filter(is_active=True)
-    
 
 
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
