@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from milestonetasks.models import MilestoneTask
+
+admin.site.register(MilestoneTask)
