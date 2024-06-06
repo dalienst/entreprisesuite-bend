@@ -3,6 +3,7 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils.text import slugify
 from django.contrib.auth import get_user_model
+from cloudinary.models import CloudinaryField
 
 from contracts.models import Contract
 from users.abstracts import UniversalIdModel, TimeStampedModel
@@ -28,6 +29,7 @@ class Milestone(UniversalIdModel, TimeStampedModel):
         ],
         default="pending",
     )
+    file = CloudinaryField("milestone_file", blank=True, null=True)
 
     class Meta:
         verbose_name = "Milestone"

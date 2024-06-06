@@ -14,6 +14,7 @@ class MilestoneSerializer(serializers.ModelSerializer):
     )
     user = serializers.CharField(read_only=True, source="user.username")
     status = serializers.CharField(max_length=50, default="pending")
+    file = serializers.FileField(required=False)
     milestone_tasks = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -29,6 +30,7 @@ class MilestoneSerializer(serializers.ModelSerializer):
             "user",
             "created_at",
             "updated_at",
+            "file",
             "milestone_tasks",
         )
 

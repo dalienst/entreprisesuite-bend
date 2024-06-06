@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils.text import slugify
+from cloudinary.models import CloudinaryField
 
 from users.abstracts import UniversalIdModel, TimeStampedModel
 from milestones.models import Milestone
@@ -27,6 +28,7 @@ class MilestoneTask(UniversalIdModel, TimeStampedModel):
         ],
         default="pending",
     )
+    file = CloudinaryField("task_file", blank=True, null=True)
     slug = models.SlugField(blank=True, null=True, unique=True)
     milestone = models.ForeignKey(
         Milestone, on_delete=models.CASCADE, related_name="milestone_tasks"

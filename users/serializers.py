@@ -43,6 +43,7 @@ class UserSerializer(serializers.ModelSerializer):
     )
     first_name = serializers.CharField(max_length=255)
     last_name = serializers.CharField(max_length=255)
+    avatar = serializers.ImageField(use_url=True, required=False)
     password = serializers.CharField(
         max_length=128,
         min_length=5,
@@ -66,6 +67,7 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
             "first_name",
             "last_name",
+            "avatar",
             "password",
             "is_verified",
             "is_active",
