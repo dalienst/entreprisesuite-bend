@@ -23,6 +23,7 @@ class Milestone(UniversalIdModel, TimeStampedModel):
         max_length=50,
         choices=[
             ("pending", "Pending"),
+            ("active", "Active"),
             ("paid", "Paid"),
         ],
         default="pending",
