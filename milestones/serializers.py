@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from milestones.models import Milestone
 from contracts.models import Contract
+from milestonetasks.serializers import MilestoneTaskSerializer
 
 
 class MilestoneSerializer(serializers.ModelSerializer):
@@ -13,6 +14,8 @@ class MilestoneSerializer(serializers.ModelSerializer):
     )
     user = serializers.CharField(read_only=True, source="user.username")
     status = serializers.CharField(max_length=50, default="pending")
+    file = serializers.FileField(required=False)
+    milestone_tasks = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Milestone
@@ -27,4 +30,11 @@ class MilestoneSerializer(serializers.ModelSerializer):
             "user",
             "created_at",
             "updated_at",
+            "file",
+            "milestone_tasks",
         )
+
+    def get_milestone_tasks(self, obj):
+        milestone_tasks = obj.milestone_tasks.all()
+        serializer = MilestoneTaskSerializer(milestone_tasks, many=True)
+        return serializer.data
