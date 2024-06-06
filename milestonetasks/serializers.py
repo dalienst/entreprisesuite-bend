@@ -21,6 +21,7 @@ class MilestoneTaskSerializer(serializers.ModelSerializer):
             "status",
             "milestone",
             "user",
+            "slug",
             "created_at",
             "updated_at",
         )
