@@ -29,7 +29,6 @@ class InvoiceItemSerializer(serializers.ModelSerializer):
         )
 
 
-# invoices/serializers.py
 class InvoiceSerializer(serializers.ModelSerializer):
     client = serializers.SlugRelatedField(
         slug_field="slug", queryset=Client.objects.all()
@@ -39,7 +38,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
     issue_date = serializers.DateField()
     due_date = serializers.DateField()
     status = serializers.CharField(max_length=50, default="pending")
-    items = InvoiceItemSerializer(many=True, read_only=True)
+    items = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Invoice
@@ -59,25 +58,37 @@ class InvoiceSerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
-        items_data = validated_data.pop("items")
+        # Remove items from validated_data if present, otherwise default to an empty list
+        items_data = validated_data.pop("items", [])
         invoice = Invoice.objects.create(**validated_data)
+
         for item_data in items_data:
             InvoiceItem.objects.create(invoice=invoice, user=invoice.user, **item_data)
+
         invoice.update_total_amount()
         return invoice
 
+    def get_items(self, obj):
+        items = obj.items.all()
+        serializer = InvoiceItemSerializer(items, many=True)
+        return serializer.data
+
     def update(self, instance, validated_data):
-        items_data = validated_data.pop("items")
+        # Remove items from validated_data if present, otherwise default to an empty list
+        items_data = validated_data.pop("items", [])
+
         instance.title = validated_data.get("title", instance.title)
         instance.issue_date = validated_data.get("issue_date", instance.issue_date)
         instance.due_date = validated_data.get("due_date", instance.due_date)
         instance.status = validated_data.get("status", instance.status)
         instance.save()
 
+        # Delete existing items and recreate them
         instance.items.all().delete()
         for item_data in items_data:
             InvoiceItem.objects.create(
                 invoice=instance, user=instance.user, **item_data
             )
+
         instance.update_total_amount()
         return instance
