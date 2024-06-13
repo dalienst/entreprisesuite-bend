@@ -22,7 +22,7 @@ class InvoiceItemSerializer(serializers.ModelSerializer):
             "quantity",
             "unit_price",
             "total_price",
-            "slug",
+            "item_slug",
             "user",
             "created_at",
             "updated_at",

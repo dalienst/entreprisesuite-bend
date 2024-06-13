@@ -44,7 +44,7 @@ class InvoiceItemDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = InvoiceItemSerializer
     queryset = InvoiceItem.objects.all()
     permission_classes = [IsAuthenticated]
-    lookup_field = "slug"
+    lookup_field = "item_slug"
 
     def get_queryset(self):
         return InvoiceItem.objects.filter(invoice__user=self.request.user)

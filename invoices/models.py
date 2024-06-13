@@ -63,14 +63,14 @@ class InvoiceItem(UniversalIdModel, TimeStampedModel):
     quantity = models.PositiveIntegerField(default=1)
     unit_price = models.DecimalField(max_digits=10, decimal_places=2)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
-    slug = models.SlugField(max_length=255, blank=True, null=True, unique=True)
+    item_slug = models.SlugField(max_length=255, blank=True, null=True, unique=True)
 
     def save(self, *args, **kwargs):
         self.total_price = self.unit_price * self.quantity
         super().save(*args, **kwargs)
-        if not self.slug:
-            self.slug = slugify(f"{self.user.get_username()}-{self.id}")
-            self.save(update_fields=["slug"])
+        if not self.item_slug:
+            self.item_slug = slugify(f"{self.user.get_username()}-{self.id}")
+            self.save(update_fields=["item_slug"])
         self.invoice.update_total_amount()
 
     def __str__(self):
