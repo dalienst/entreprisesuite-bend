@@ -69,7 +69,7 @@ class InvoiceItem(UniversalIdModel, TimeStampedModel):
         self.total_price = self.unit_price * self.quantity
         super().save(*args, **kwargs)
         if not self.slug:
-            self.slug = slugify(f"{self.user.get_username}-{self.id}")
+            self.slug = slugify(f"{self.user.get_username()}-{self.id}")
             self.save(update_fields=["slug"])
         self.invoice.update_total_amount()
 
