@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "milestones",
     "interims",
     "milestonetasks",
+    "invoices",
 ]
 
 MIDDLEWARE = [

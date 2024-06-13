@@ -118,3 +118,6 @@ class User(
 
     def __str__(self) -> str:
         return self.username
+
+    def get_username(self) -> str:
+        return self.username
