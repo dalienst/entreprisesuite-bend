@@ -38,6 +38,11 @@ class Invoice(UniversalIdModel, TimeStampedModel):
     def __str__(self):
         return self.client.name
 
+    class Meta:
+        verbose_name = "Invoice"
+        verbose_name_plural = "Invoices"
+        ordering = ["-created_at"]
+
 
 @receiver(pre_save, sender=Invoice)
 def slug_pre_save(sender, instance, **kwargs) -> None:
@@ -70,3 +75,8 @@ class InvoiceItem(UniversalIdModel, TimeStampedModel):
 
     def __str__(self):
         return self.description
+
+    class Meta:
+        verbose_name = "Invoice Item"
+        verbose_name_plural = "Invoice Items"
+        ordering = ["-created_at"]

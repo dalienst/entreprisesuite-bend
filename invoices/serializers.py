@@ -39,6 +39,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
     issue_date = serializers.DateField()
     due_date = serializers.DateField()
     status = serializers.CharField(max_length=50, default="pending")
+    items = InvoiceItemSerializer(many=True, read_only=True)
 
     class Meta:
         model = Invoice
