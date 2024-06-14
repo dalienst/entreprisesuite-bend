@@ -37,7 +37,7 @@ class InvoiceDetailView(generics.RetrieveUpdateDestroyAPIView):
 class InvoiceClientDetailView(generics.RetrieveAPIView):
     serializer_class = MimimalInvoiceSerializer
     queryset = Invoice.objects.all()
-    lookup_field = "id"
+    lookup_field = "slug"
 
 
 class InvoiceItemListCreateView(generics.ListCreateAPIView):
