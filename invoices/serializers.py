@@ -75,7 +75,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         # Remove items from validated_data if present, otherwise default to an empty list
-        items_data = validated_data.pop("items", [])
+        items_data = validated_data.pop("items", None)
 
         instance.title = validated_data.get("title", instance.title)
         instance.issue_date = validated_data.get("issue_date", instance.issue_date)
@@ -83,12 +83,51 @@ class InvoiceSerializer(serializers.ModelSerializer):
         instance.status = validated_data.get("status", instance.status)
         instance.save()
 
-        # Delete existing items and recreate them
-        instance.items.all().delete()
-        for item_data in items_data:
-            InvoiceItem.objects.create(
-                invoice=instance, user=instance.user, **item_data
-            )
+        if items_data is not None:
+            # Delete existing items and recreate them only if 'items' is in the request
+            instance.items.all().delete()
+            for item_data in items_data:
+                InvoiceItem.objects.create(
+                    invoice=instance, user=instance.user, **item_data
+                )
 
         instance.update_total_amount()
         return instance
+
+
+class MinimalClientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Client
+        fields = (
+            "id",
+            "name",
+            "email",
+            "phone",
+            "slug",
+        )
+
+
+class MimimalInvoiceSerializer(serializers.ModelSerializer):
+    client = MinimalClientSerializer(read_only=True)
+    items = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Invoice
+        fields = (
+            "id",
+            "client",
+            "title",
+            "issue_date",
+            "due_date",
+            "status",
+            "items",
+            "slug",
+            "total_amount",
+            "created_at",
+            "updated_at",
+        )
+
+    def get_items(self, obj):
+        items = obj.items.all()
+        serializer = InvoiceItemSerializer(items, many=True)
+        return serializer.data
