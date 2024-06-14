@@ -1,11 +1,17 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
-from invoices.serializers import InvoiceSerializer, InvoiceItemSerializer
+from clients.serializers import ClientSerializer
+from invoices.serializers import (
+    InvoiceSerializer,
+    InvoiceItemSerializer,
+    MimimalInvoiceSerializer,
+)
 from invoices.models import Invoice, InvoiceItem
+from clients.models import Client
+from rest_framework.response import Response
 
 
-# invoices/views.py
 class InvoiceListCreateView(generics.ListCreateAPIView):
     serializer_class = InvoiceSerializer
     queryset = Invoice.objects.all()
@@ -26,6 +32,12 @@ class InvoiceDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Invoice.objects.filter(user=self.request.user)
+
+
+class InvoiceClientDetailView(generics.RetrieveAPIView):
+    serializer_class = MimimalInvoiceSerializer
+    queryset = Invoice.objects.all()
+    lookup_field = "id"
 
 
 class InvoiceItemListCreateView(generics.ListCreateAPIView):
